@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Error - MBA Student Counselor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎓%3C/text%3E%3C/svg%3E">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .error-icon {
+            font-size: 8rem;
+            color: var(--error-color);
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        
+        .error-code {
+            font-size: 6rem;
+            font-weight: 900;
+            color: var(--text-primary);
+            margin: 0;
+            line-height: 1;
+        }
+        
+        .error-message {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin: 1rem 0 2rem;
+        }
+        
+        .error-description {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 500px;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+        
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .error-button {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .error-button.primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .error-button.secondary {
+            background: var(--background-secondary);
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+        
+        .error-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .error-button.primary:hover {
+            background: var(--primary-hover);
+        }
+        
+        .error-button.secondary:hover {
+            background: var(--background-primary);
+        }
+        
+        .error-details {
+            background: var(--background-secondary);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 2rem 0;
+            border-left: 4px solid var(--error-color);
+            text-align: left;
+            max-width: 600px;
+            display: none;
+        }
+        
+        .error-details.show {
+            display: block;
+        }
+        
+        .error-details h3 {
+            margin: 0 0 0.5rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        .error-details p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 640px) {
+            .error-icon {
+                font-size: 6rem;
+            }
+            
+            .error-code {
+                font-size: 4rem;
+            }
+            
+            .error-message {
+                font-size: 1.25rem;
+            }
+            
+            .error-actions {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        
+        <h1 class="error-code">500</h1>
+        
+        <p class="error-message">Internal Server Error</p>
+        
+        <p class="error-description">
+            Oops! Something went wrong on our end. Our MBA counseling system encountered an unexpected issue. 
+            Please try again in a moment, or contact support if the problem persists.
+        </p>
+        
+        <div class="error-actions">
+            <a href="/" class="error-button primary">
+                <i class="fas fa-home"></i>
+                Back to Chat
+            </a>
+            
+            <button onclick="location.reload()" class="error-button secondary">
+                <i class="fas fa-redo"></i>
+                Try Again
+            </button>
+            
+            <button onclick="toggleDetails()" class="error-button secondary">
+                <i class="fas fa-info-circle"></i>
+                Show Details
+            </button>
+        </div>
+        
+        <div id="error-details" class="error-details">
+            <h3>Technical Details</h3>
+            <p>
+                <strong>Error ID:</strong> {{ error_id if error_id else 'N/A' }}<br>
+                <strong>Time:</strong> {{ timestamp if timestamp else 'Unknown' }}<br>
+                <strong>Status:</strong> 500 Internal Server Error<br>
+                <strong>Request:</strong> {{ request.method if request else 'N/A' }} {{ request.url if request else 'N/A' }}
+            </p>
+        </div>
+    </div>
+    
+    <script>
+        function toggleDetails() {
+            const details = document.getElementById('error-details');
+            details.classList.toggle('show');
+            
+            const button = event.target;
+            const icon = button.querySelector('i');
+            
+            if (details.classList.contains('show')) {
+                icon.className = 'fas fa-eye-slash';
+                button.lastChild.textContent = ' Hide Details';
+            } else {
+                icon.className = 'fas fa-info-circle';
+                button.lastChild.textContent = ' Show Details';
+            }
+        }
+        
+        // Auto-retry after 10 seconds
+        setTimeout(() => {
+            const retryNotice = document.createElement('div');
+            retryNotice.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--primary-color);
+                color: white;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                cursor: pointer;
+                animation: slideIn 0.3s ease;
+            `;
+            retryNotice.innerHTML = `
+                <i class="fas fa-redo"></i>
+                Click to retry automatically
+            `;
+            retryNotice.onclick = () => location.reload();
+            
+            document.body.appendChild(retryNotice);
+        }, 10000);
+        
+        // Add slideIn animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

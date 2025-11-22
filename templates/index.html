@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MBA Student Counselor - Find Your Perfect MBA Program</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <h1>MBA Counselor</h1>
+                </div>
+                <div class="header-info">
+                    <span class="status-indicator online" id="status-indicator"></span>
+                    <span>Alex - Your AI Career Counselor</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Chat Container -->
+    <main class="chat-container">
+        <div class="container">
+            <!-- Welcome Section -->
+            <div class="welcome-section" id="welcome-section">
+                <div class="welcome-content">
+                    <div class="welcome-avatar">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <h2>Welcome to Your MBA Journey! 🎓</h2>
+                    <p>Hi there! I'm Alex, your dedicated MBA counselor. I'm here to help you find the perfect MBA program that matches your career goals, budget, and preferences.</p>
+                    <div class="welcome-features">
+                        <div class="feature">
+                            <i class="fas fa-search"></i>
+                            <span>Smart Program Search</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Career Guidance</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-dollar-sign"></i>
+                            <span>Budget Planning</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-award"></i>
+                            <span>Accreditation Info</span>
+                        </div>
+                    </div>
+                    <div class="welcome-suggestions">
+                        <p>Try asking me:</p>
+                        <div class="suggestion-buttons">
+                            <button class="suggestion-btn" onclick="sendSuggestion('I want to do an MBA in finance')">
+                                💰 Finance MBA
+                            </button>
+                            <button class="suggestion-btn" onclick="sendSuggestion('Show me affordable MBA programs')">
+                                🏷️ Affordable Programs
+                            </button>
+                            <button class="suggestion-btn" onclick="sendSuggestion('I need MBA with good placements')">
+                                🎯 Best Placements
+                            </button>
+                            <button class="suggestion-btn" onclick="sendSuggestion('Compare top MBA universities')">
+                                📊 Compare Programs
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages Area -->
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be added here dynamically -->
+            </div>
+
+            <!-- User Preferences Panel -->
+            <div class="preferences-panel" id="preferences-panel">
+                <h3><i class="fas fa-cog"></i> Your Preferences</h3>
+                <div class="preferences-content" id="preferences-content">
+                    <p class="no-preferences">I'll learn about your preferences as we chat!</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Chat Input Area -->
+    <div class="chat-input-area">
+        <div class="container">
+            <div class="input-container">
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="message-input" 
+                        placeholder="Ask me about MBA programs, specializations, fees, or anything else..."
+                        maxlength="500"
+                    >
+                    <button id="send-button" class="send-button" disabled>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <div class="input-actions">
+                    <button id="reset-button" class="action-button" title="Start New Conversation">
+                        <i class="fas fa-refresh"></i>
+                        New Chat
+                    </button>
+                    <button id="export-button" class="action-button" title="Export Conversation">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loading-overlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Alex is thinking...</p>
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="toast error-toast" id="error-toast">
+        <i class="fas fa-exclamation-circle"></i>
+        <span id="error-message">Something went wrong!</span>
+        <button class="toast-close" onclick="closeToast()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast success-toast" id="success-toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="success-message">Success!</span>
+        <button class="toast-close" onclick="closeToast()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>

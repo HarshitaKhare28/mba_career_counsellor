@@ -1,0 +1,7 @@
+.venv
+__pycache__
+brochures
+results
+.env
+.env.template
+summaries and tests
